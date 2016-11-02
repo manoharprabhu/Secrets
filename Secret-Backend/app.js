@@ -5,6 +5,11 @@ var path = require("path");
 var bodyParser = require("body-parser")
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 var PORT = process.env.PORT || 8080;
 
 /*
@@ -12,12 +17,12 @@ var PORT = process.env.PORT || 8080;
  Get random secret if no criteria is passed.
  Search the secrets and return the top X secrets having the keyword if passes.
 */
-app.get("/secret", function(req, res) {
+app.get("/secret", function (req, res) {
     var keyword = req.query.keyword;
     if (keyword) {
         console.log("keyword found " + keyword);
         //Search for the keyword in the secrets
-        DB.getSecretWithKeyWord(10, keyword, function(error, secrets) {
+        DB.getSecretWithKeyWord(10, keyword, function (error, secrets) {
             if (error) {
                 res.json({"error": true, "message": error});
             } else {
@@ -26,38 +31,41 @@ app.get("/secret", function(req, res) {
         });
     } else {
         //Get a random secret
-        DB.getRandomSecret(function(error, secret) {
-            if (error) {
-                res.json({"error": true, "message": error});
-            } else {
-                res.json(secret);
-            }
-        });
+        DB
+            .getRandomSecret(function (error, secret) {
+                if (error) {
+                    res.json({"error": true, "message": error});
+                } else {
+                    res.json(secret);
+                }
+            });
     }
 });
 
-app.get("/trending", function(req, res) {
-    DB.getTopTrendingSecret(10, function(err, data) {
-        if (err) {
-            res.json({"error": true, "message": error});
-        } else {
-            res.json(data);
-        }
-    });
+app.get("/trending", function (req, res) {
+    DB
+        .getTopTrendingSecret(10, function (err, data) {
+            if (err) {
+                res.json({"error": true, "message": error});
+            } else {
+                res.json(data);
+            }
+        });
 });
 
-// Post a new secret. Store the secret text and initialize the comments and likes/dislikes to 0
-app.post("/newsecret", function(req, res) {
+// Post a new secret. Store the secret text and initialize the comments and
+// likes/dislikes to 0
+app.post("/newsecret", function (req, res) {
     var secretText = req.body.secret;
-    DB.postNewSecret(secretText, function(error) {
+    DB.postNewSecret(secretText, function (error, secret) {
         if (error) {
             res.json({"error": true, "message": error});
         } else {
-            res.json({"success": true});
+            res.json({"success": true, "id": secret._id});
         }
     })
 });
 
-app.listen(PORT, function() {
+app.listen(PORT, function () {
     console.log("Server started at port " + PORT);
 });

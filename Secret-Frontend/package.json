@@ -66,6 +66,8 @@
     "core-js": "^2.0.0",
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "react-activity-indicator": "^0.7.7",
+    "react-dom": "^15.0.0",
+    "sweetalert": "^1.1.3"
   }
 }
