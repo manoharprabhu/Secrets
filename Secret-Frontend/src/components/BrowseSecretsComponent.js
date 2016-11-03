@@ -19,7 +19,24 @@ class BrowseSecretsComponent extends React.Component {
     this.getTrendingSecrets = this
       .getTrendingSecrets
       .bind(this);
+    this.likeSecret = this
+      .likeSecret
+      .bind(this);
+    this.dislikeSecret = this
+      .dislikeSecret
+      .bind(this);
+    this.commentOnSecret = this
+      .commentOnSecret
+      .bind(this);
   }
+  likeSecret(id) {
+    alert(id);
+  }
+
+  dislikeSecret(id) {}
+
+  commentOnSecret(id) {}
+
   getTrendingSecrets() {
     axios
       .get('http://localhost:8080/trending')
@@ -38,7 +55,52 @@ class BrowseSecretsComponent extends React.Component {
     return (
       <div className="app-body">
         <NavbarComponent active={2}/>
-        <div className="container"></div>
+        <div className="container">
+          {this
+            .state
+            .secrets
+            .map(function (item) {
+              return (
+                <div className="row" key={item._id}>
+                  <div className="col-md-12">
+                    <div className="panel panel-default">
+                      <div className="panel-body">
+                        {item.secret}
+                      </div>
+                      <div className="panel-footer">
+                        <div className="row">
+                          <div className="col-md-4 text-center like-text right-button-border">(<span>{item.likes}</span>)
+                            <a
+                              href="#"
+                              onClick={this
+                              .likeSecret
+                              .bind(this, item._id)}>
+                              Like</a>
+                          </div>
+                          <div className="col-md-4 text-center dislike-text right-button-border">(<span>{item.dislikes}</span>)
+                            <a
+                              href="#"
+                              onClick={this
+                              .dislikeSecret
+                              .bind(this, item._id)}>
+                              Dislike</a>
+                          </div>
+                          <div className="col-md-4 text-center comments-text">(<span>{item.comments.length}</span>)
+                            <a
+                              href="#"
+                              onClick={this
+                              .commentOnSecret
+                              .bind(this, item._id)}>
+                              Comment</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            }.bind(this))}
+        </div>
       </div>
     );
   }
