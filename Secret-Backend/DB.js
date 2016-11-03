@@ -84,7 +84,25 @@ var Database = (function () {
         });
     };
 
-    return {getRandomSecret, getSecretWithKeyWord, getTopTrendingSecret, postNewSecret}
+    var likeSecret = function (id, callback) {
+        db
+            .update({
+                _id: id
+            }, {
+                $inc: {
+                    likes: 1
+                }
+            }, function () {
+                db
+                    .findOne({
+                        _id: id
+                    }, function (err, doc) {
+                        callback(err, doc);
+                    });
+            });
+    };
+
+    return {getRandomSecret, getSecretWithKeyWord, getTopTrendingSecret, postNewSecret, likeSecret}
 
 }());
 

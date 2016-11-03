@@ -66,6 +66,17 @@ app.post("/newsecret", function (req, res) {
     })
 });
 
+app.post("/likeSecret", function (req, res) {
+    var id = req.body.id;
+    DB.likeSecret(id, function (error, updatedSecret) {
+        if (error) {
+            res.json({"error": true, "message": error});
+        } else {
+            res.json(updatedSecret);
+        }
+    });
+});
+
 app.listen(PORT, function () {
     console.log("Server started at port " + PORT);
 });

@@ -29,8 +29,27 @@ class BrowseSecretsComponent extends React.Component {
       .commentOnSecret
       .bind(this);
   }
-  likeSecret(id) {
-    alert(id);
+  likeSecret(e, id) {
+    e.preventDefault();
+    axios
+      .post('http://localhost:8080/likeSecret', {id: id})
+      .then(function (response) {
+        var secrets = this
+          .state
+          .secrets
+          .slice();
+        var secrets = secrets.map(function (item) {
+          if (item._id === id) {
+            return response.data;
+          } else {
+            return item;
+          }
+        });
+        this.setState({secrets: secrets});
+      }.bind(this))
+      .catch(function () {
+        sweetalert("Error", "There was an error while liking the secret. Please try again later.", "error");
+      }.bind(this));
   }
 
   dislikeSecret(id) {}
@@ -70,11 +89,7 @@ class BrowseSecretsComponent extends React.Component {
                       <div className="panel-footer">
                         <div className="row">
                           <div className="col-md-4 text-center like-text right-button-border">(<span>{item.likes}</span>)
-                            <a
-                              href="#"
-                              onClick={this
-                              .likeSecret
-                              .bind(this, item._id)}>
+                            <a href="#" onClick={(e) => this.likeSecret(e, item._id)}>
                               Like</a>
                           </div>
                           <div className="col-md-4 text-center dislike-text right-button-border">(<span>{item.dislikes}</span>)
