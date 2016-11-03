@@ -48,7 +48,7 @@ class BrowseSecretsComponent extends React.Component {
   likeDislikeSecret(e, id, type) {
     e.preventDefault();
     axios
-      .post('http://localhost:8080/likeDislikeSecret', {
+      .post('http://127.0.0.1:8080/likeDislikeSecret', {
         id: id,
         type: type
       })
@@ -67,7 +67,7 @@ class BrowseSecretsComponent extends React.Component {
         this.setState({secrets: secrets});
       }.bind(this))
       .catch(function () {
-        sweetalert("Error", "There was an error while liking the secret. Please try again later.", "error");
+        sweetalert('Error', 'There was an error while liking the secret. Please try again later.', 'error');
       }.bind(this));
   }
 
@@ -92,7 +92,7 @@ class BrowseSecretsComponent extends React.Component {
     var id = this.state.currenteditedsecret;
     this.setState({isloading: true});
     axios
-      .post('http://localhost:8080/postComment', {
+      .post('http://127.0.0.1:8080/postComment', {
         id: id,
         comment: this.state.commenttext
       })
@@ -114,14 +114,14 @@ class BrowseSecretsComponent extends React.Component {
 
   getTrendingSecrets() {
     axios
-      .get('http://localhost:8080/trending')
+      .get('http://127.0.0.1:8080/trending')
       .then(function (response) {
         this.setState({isloading: false, secrets: response.data});
       }.bind(this))
-      .catch(function (response) {
+      .catch(function () {
         this.setState({isloading: false, secrets: []});
-        sweetalert("Error", "There was an error while getting the secrets. Please try again later.", "error");
-      }.bind(this));;
+        sweetalert('Error', 'There was an error while getting the secrets. Please try again later.', 'error');
+      }.bind(this));
   }
   componentDidMount() {
     this.getTrendingSecrets();
@@ -165,7 +165,7 @@ class BrowseSecretsComponent extends React.Component {
             }.bind(this))}
         </div>
         <div
-          className={"comment-post-modal " + (this.state.ispostingcomment === true
+          className={'comment-post-modal ' + (this.state.ispostingcomment === true
           ? 'visible'
           : 'hidden')}>
           <div className="row">

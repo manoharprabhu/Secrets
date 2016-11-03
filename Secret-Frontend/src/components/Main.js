@@ -33,21 +33,20 @@ class AppComponent extends React.Component {
 
   postSecret() {
     this.setState({isloading: true});
-    var self = this;
     axios
-      .post('http://localhost:8080/newsecret', {'secret': this.state.secret})
+      .post('http://127.0.0.1:8080/newsecret', {'secret': this.state.secret})
       .then(function (response) {
         if (response.data && response.data.success === true) {
           this.setState({secret: ''});
-          sweetalert("Success", "Your secret has been successfully posted with the ID: " + response.data.id, "success");
+          sweetalert('Success', 'Your secret has been successfully posted with the ID: ' + response.data.id, 'success');
         } else {
-          sweetalert("Error", "There was an error while posting your secret. Please try again later.", "error");
+          sweetalert('Error', 'There was an error while posting your secret. Please try again later.', 'error');
         }
         this.setState({isloading: false});
       }.bind(this))
-      .catch(function (response) {
+      .catch(function () {
         this.setState({isloading: false});
-        sweetalert("Error", "There was an error while posting your secret. Please try again later.", "error");
+        sweetalert('Error', 'There was an error while posting your secret. Please try again later.', 'error');
       }.bind(this));
   }
   render() {
