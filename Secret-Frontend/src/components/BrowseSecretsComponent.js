@@ -144,15 +144,18 @@ class BrowseSecretsComponent extends React.Component {
                       </div>
                       <div className="panel-footer">
                         <div className="row">
-                          <div className="col-md-4 text-center like-text right-button-border">(<span>{item.likes}</span>)
+                          <div className="col-md-4 text-center right-button-border">
+                            <span className="like-count count-wrapper">{item.likes}</span>
                             <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 1)}>
                               Like</a>
                           </div>
-                          <div className="col-md-4 text-center dislike-text right-button-border">(<span>{item.dislikes}</span>)
+                          <div className="col-md-4 text-center right-button-border">
+                            <span className="dislike-count count-wrapper">{item.dislikes}</span>
                             <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 0)}>
                               Dislike</a>
                           </div>
-                          <div className="col-md-4 text-center comments-text">(<span>{item.comments.length}</span>)
+                          <div className="col-md-4 text-center">
+                            <span className="comments-count count-wrapper">{item.comments.length}</span>
                             <a href="#" onClick={(e) => this.commentOnSecret(e, item._id)}>
                               Comment</a>
                           </div>
