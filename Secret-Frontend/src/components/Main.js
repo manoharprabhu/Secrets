@@ -44,6 +44,10 @@ class AppComponent extends React.Component {
           sweetalert("Error", "There was an error while posting your secret. Please try again later.", "error");
         }
         this.setState({isloading: false});
+      }.bind(this))
+      .catch(function (response) {
+        this.setState({isloading: false});
+        sweetalert("Error", "There was an error while posting your secret. Please try again later.", "error");
       }.bind(this));
   }
   render() {
