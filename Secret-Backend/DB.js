@@ -112,7 +112,32 @@ var Database = (function () {
             });
     };
 
-    return {getRandomSecret, getSecretWithKeyWord, getTopTrendingSecret, postNewSecret, likeDislikeSecret}
+    var postComment = function (id, comment, callback) {
+        db
+            .update({
+                _id: id
+            }, {
+                $push: {
+                    comments: comment
+                }
+            }, function () {
+                db
+                    .findOne({
+                        _id: id
+                    }, function (err, doc) {
+                        callback(err, doc);
+                    });
+            });
+    };
+
+    return {
+        getRandomSecret,
+        getSecretWithKeyWord,
+        getTopTrendingSecret,
+        postNewSecret,
+        likeDislikeSecret,
+        postComment
+    }
 
 }());
 

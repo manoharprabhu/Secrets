@@ -78,6 +78,18 @@ app.post("/likeDislikeSecret", function (req, res) {
     });
 });
 
+app.post("/postComment", function (req, res) {
+    var id = req.body.id;
+    var comment = req.body.comment;
+    DB.postComment(id, comment, function (error, updatedSecret) {
+        if (error) {
+            res.json({"error": true, "message": error});
+        } else {
+            res.json(updatedSecret);
+        }
+    });
+});
+
 app.listen(PORT, function () {
     console.log("Server started at port " + PORT);
 });

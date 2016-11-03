@@ -1,4 +1,6 @@
 require('bootstrap/dist/css/bootstrap.min.css');
+require('styles/Navbar.css');
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './Main';
@@ -24,23 +26,29 @@ class NavbarComponent extends React.Component {
     }
     render() {
         return (
-            <nav className="navbar navbar-default">
+            <nav className="navbar navbar-default navbar-bottom">
                 <div className="container-fluid">
                     <div className="navbar-header">
                         <a className="navbar-brand" href="#">Secrets</a>
                     </div>
                     <ul className="nav navbar-nav">
                         <li
-                            className={'' + (this.props.active === 1
+                            className={'right-button-border ' + (this.props.active === 1
                             ? 'active'
                             : '')}>
-                            <a href="#" onClick={this.renderHome}>Post a secret</a>
+                            <a href="#" onClick={this.renderHome}>Post A Secret</a>
                         </li>
                         <li
-                            className={'' + (this.props.active === 2
+                            className={'right-button-border ' + (this.props.active === 2
                             ? 'active'
                             : '')}>
-                            <a href="#" onClick={this.renderBrowseSecrets}>Browse secrets</a>
+                            <a href="#" onClick={this.renderBrowseSecrets}>Top Trending Secrets</a>
+                        </li>
+                        <li
+                            className={'right-button-border ' + (this.props.active === 3
+                            ? 'active'
+                            : '')}>
+                            <a href="#">View A Random Secret</a>
                         </li>
                     </ul>
                 </div>

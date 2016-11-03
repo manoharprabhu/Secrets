@@ -14,7 +14,11 @@ class BrowseSecretsComponent extends React.Component {
     super(props);
     this.state = {
       isloading: false,
-      secrets: []
+      secrets: [],
+      currenteditedsecretcomments: [],
+      ispostingcomment: false,
+      commenttext: '',
+      currenteditedsecret: ''
     };
     this.getTrendingSecrets = this
       .getTrendingSecrets
@@ -25,7 +29,22 @@ class BrowseSecretsComponent extends React.Component {
     this.commentOnSecret = this
       .commentOnSecret
       .bind(this);
+    this.handleChange = this
+      .handleChange
+      .bind(this);
+    this.postComment = this
+      .postComment
+      .bind(this);
+
+    this.cancelComment = this
+      .cancelComment
+      .bind(this);
   }
+
+  handleChange(event) {
+    this.setState({commenttext: event.target.value});
+  }
+
   likeDislikeSecret(e, id, type) {
     e.preventDefault();
     axios
@@ -52,7 +71,46 @@ class BrowseSecretsComponent extends React.Component {
       }.bind(this));
   }
 
-  commentOnSecret(id) {}
+  cancelComment() {
+    this.setState({isloading: false, ispostingcomment: false});
+  }
+
+  commentOnSecret(e, id) {
+    e.preventDefault();
+    this.setState({ispostingcomment: true, currenteditedsecret: id});
+    this
+      .state
+      .secrets
+      .forEach(function (item) {
+        if (item._id === id) {
+          this.setState({currenteditedsecretcomments: item.comments});
+        }
+      }.bind(this));
+  }
+
+  postComment() {
+    var id = this.state.currenteditedsecret;
+    this.setState({isloading: true});
+    axios
+      .post('http://localhost:8080/postComment', {
+        id: id,
+        comment: this.state.commenttext
+      })
+      .then(function (response) {
+        var secrets = this
+          .state
+          .secrets
+          .slice();
+        var secrets = secrets.map(function (item) {
+          if (item._id === id) {
+            return response.data;
+          } else {
+            return item;
+          }
+        });
+        this.setState({secrets: secrets, ispostingcomment: false, commenttext: '', currenteditedsecret: '', isloading: false});
+      }.bind(this));
+  }
 
   getTrendingSecrets() {
     axios
@@ -95,11 +153,7 @@ class BrowseSecretsComponent extends React.Component {
                               Dislike</a>
                           </div>
                           <div className="col-md-4 text-center comments-text">(<span>{item.comments.length}</span>)
-                            <a
-                              href="#"
-                              onClick={this
-                              .commentOnSecret
-                              .bind(this, item._id)}>
+                            <a href="#" onClick={(e) => this.commentOnSecret(e, item._id)}>
                               Comment</a>
                           </div>
                         </div>
@@ -109,6 +163,50 @@ class BrowseSecretsComponent extends React.Component {
                 </div>
               );
             }.bind(this))}
+        </div>
+        <div
+          className={"comment-post-modal " + (this.state.ispostingcomment === true
+          ? 'visible'
+          : 'hidden')}>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="row">
+                <div className="col-md-12">
+                  <textarea
+                    className="form-control"
+                    rows="5"
+                    id="comment-text"
+                    value={this.state.commenttext}
+                    placeholder="Comment"
+                    onChange={this.handleChange}></textarea>
+                </div>
+              </div>
+              <div className="row"><br/></div>
+              <div className="row">
+                <div className="col-md-3">
+                  <button className="btn btn-primary" onClick={this.postComment}>Post</button>
+                </div>
+                <div className="col-md-2">
+                  <button className="btn btn-primary" onClick={this.cancelComment}>Cancel</button>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-8">
+              <div className="comments-container">
+                <div className="col-md-12">
+                  <h4>Comments ({this.state.currenteditedsecretcomments.length})</h4>
+                </div>
+                {this
+                  .state
+                  .currenteditedsecretcomments
+                  .map(function (item) {
+                    return (
+                      <div className="col-md-12 comment-text">{item}</div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
