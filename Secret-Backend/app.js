@@ -66,9 +66,10 @@ app.post("/newsecret", function (req, res) {
     })
 });
 
-app.post("/likeSecret", function (req, res) {
+app.post("/likeDislikeSecret", function (req, res) {
     var id = req.body.id;
-    DB.likeSecret(id, function (error, updatedSecret) {
+    var type = req.body.type;
+    DB.likeDislikeSecret(id, type, function (error, updatedSecret) {
         if (error) {
             res.json({"error": true, "message": error});
         } else {

@@ -19,20 +19,20 @@ class BrowseSecretsComponent extends React.Component {
     this.getTrendingSecrets = this
       .getTrendingSecrets
       .bind(this);
-    this.likeSecret = this
-      .likeSecret
-      .bind(this);
-    this.dislikeSecret = this
-      .dislikeSecret
+    this.likeDislikeSecret = this
+      .likeDislikeSecret
       .bind(this);
     this.commentOnSecret = this
       .commentOnSecret
       .bind(this);
   }
-  likeSecret(e, id) {
+  likeDislikeSecret(e, id, type) {
     e.preventDefault();
     axios
-      .post('http://localhost:8080/likeSecret', {id: id})
+      .post('http://localhost:8080/likeDislikeSecret', {
+        id: id,
+        type: type
+      })
       .then(function (response) {
         var secrets = this
           .state
@@ -51,8 +51,6 @@ class BrowseSecretsComponent extends React.Component {
         sweetalert("Error", "There was an error while liking the secret. Please try again later.", "error");
       }.bind(this));
   }
-
-  dislikeSecret(id) {}
 
   commentOnSecret(id) {}
 
@@ -89,15 +87,11 @@ class BrowseSecretsComponent extends React.Component {
                       <div className="panel-footer">
                         <div className="row">
                           <div className="col-md-4 text-center like-text right-button-border">(<span>{item.likes}</span>)
-                            <a href="#" onClick={(e) => this.likeSecret(e, item._id)}>
+                            <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 1)}>
                               Like</a>
                           </div>
                           <div className="col-md-4 text-center dislike-text right-button-border">(<span>{item.dislikes}</span>)
-                            <a
-                              href="#"
-                              onClick={this
-                              .dislikeSecret
-                              .bind(this, item._id)}>
+                            <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 0)}>
                               Dislike</a>
                           </div>
                           <div className="col-md-4 text-center comments-text">(<span>{item.comments.length}</span>)

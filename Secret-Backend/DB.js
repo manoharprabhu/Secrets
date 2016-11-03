@@ -84,15 +84,25 @@ var Database = (function () {
         });
     };
 
-    var likeSecret = function (id, callback) {
-        db
-            .update({
-                _id: id
-            }, {
+    var likeDislikeSecret = function (id, type, callback) {
+        var typeObj = {};
+        if (type === 1) {
+            typeObj = {
                 $inc: {
                     likes: 1
                 }
-            }, function () {
+            }
+        } else {
+            typeObj = {
+                $inc: {
+                    dislikes: 1
+                }
+            }
+        }
+        db
+            .update({
+                _id: id
+            }, typeObj, function () {
                 db
                     .findOne({
                         _id: id
@@ -102,7 +112,7 @@ var Database = (function () {
             });
     };
 
-    return {getRandomSecret, getSecretWithKeyWord, getTopTrendingSecret, postNewSecret, likeSecret}
+    return {getRandomSecret, getSecretWithKeyWord, getTopTrendingSecret, postNewSecret, likeDislikeSecret}
 
 }());
 
