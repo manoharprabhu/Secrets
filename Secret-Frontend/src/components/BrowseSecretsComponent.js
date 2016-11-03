@@ -144,20 +144,35 @@ class BrowseSecretsComponent extends React.Component {
                       </div>
                       <div className="panel-footer">
                         <div className="row">
-                          <div className="col-md-4 text-center right-button-border">
-                            <span className="like-count count-wrapper">{item.likes}</span>
-                            <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 1)}>
-                              Like</a>
+                          <div className="col-md-4 right-button-border">
+                            <div className="row">
+                              <div className="col-md-4"></div>
+                              <div className="col-md-4 text-left">
+                                <span className="like-count count-wrapper text-center">{item.likes}</span>
+                                <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 1)}>Like</a>
+                              </div>
+                              <div className="col-md-4"></div>
+                            </div>
                           </div>
-                          <div className="col-md-4 text-center right-button-border">
-                            <span className="dislike-count count-wrapper">{item.dislikes}</span>
-                            <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 0)}>
-                              Dislike</a>
+                          <div className="col-md-4 right-button-border">
+                            <div className="row">
+                              <div className="col-md-4"></div>
+                              <div className="col-md-4 text-left">
+                                <span className="dislike-count count-wrapper text-center">{item.dislikes}</span>
+                                <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 0)}>Dislike</a>
+                              </div>
+                              <div className="col-md-4"></div>
+                            </div>
                           </div>
-                          <div className="col-md-4 text-center">
-                            <span className="comments-count count-wrapper">{item.comments.length}</span>
-                            <a href="#" onClick={(e) => this.commentOnSecret(e, item._id)}>
-                              Comment</a>
+                          <div className="col-md-4">
+                            <div className="row">
+                              <div className="col-md-4"></div>
+                              <div className="col-md-5 text-left">
+                                <span className="comments-count count-wrapper text-center">{item.comments.length}</span>
+                                <a href="#" onClick={(e) => this.commentOnSecret(e, item._id)}>Comment</a>
+                              </div>
+                              <div className="col-md-3"></div>
+                            </div>
                           </div>
                         </div>
                       </div>
