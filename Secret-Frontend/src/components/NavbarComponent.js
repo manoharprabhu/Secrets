@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './Main';
 import BrowseSecretsComponent from './BrowseSecretsComponent';
+import ViewRandomSecretComponent from './ViewRandomSecretComponent';
 
 class NavbarComponent extends React.Component {
     constructor(props) {
@@ -15,6 +16,13 @@ class NavbarComponent extends React.Component {
         this.renderBrowseSecrets = this
             .renderBrowseSecrets
             .bind(this);
+        this.renderViewRandomSecret = this
+            .renderViewRandomSecret
+            .bind(this);
+    }
+    renderViewRandomSecret() {
+        ReactDOM.render(
+            <ViewRandomSecretComponent/>, document.getElementById('app'));
     }
     renderHome() {
         ReactDOM.render(
@@ -22,7 +30,7 @@ class NavbarComponent extends React.Component {
     }
     renderBrowseSecrets() {
         ReactDOM.render(
-            <BrowseSecretsComponent/>, document.getElementById('app'));
+            <BrowseSecretsComponent type={0} navbarActive={2}/>, document.getElementById('app'));
     }
     render() {
         return (
@@ -48,7 +56,7 @@ class NavbarComponent extends React.Component {
                             className={'right-button-border ' + (this.props.active === 3
                             ? 'active'
                             : '')}>
-                            <a href="#">View A Random Secret</a>
+                            <a href="#" onClick={this.renderViewRandomSecret}>View A Random Secret</a>
                         </li>
                     </ul>
                 </div>

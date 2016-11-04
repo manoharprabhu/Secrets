@@ -4,6 +4,7 @@ import React from 'react';
 import NavbarComponent from './NavbarComponent';
 import axios from 'axios';
 import sweetalert from 'sweetalert';
+import SecretComponent from './SecretComponent';
 
 require('styles//BrowseSecrets.css');
 require('bootstrap/dist/css/bootstrap.min.css');
@@ -20,8 +21,8 @@ class BrowseSecretsComponent extends React.Component {
       commenttext: '',
       currenteditedsecret: ''
     };
-    this.getTrendingSecrets = this
-      .getTrendingSecrets
+    this.getSecrets = this
+      .getSecrets
       .bind(this);
     this.likeDislikeSecret = this
       .likeDislikeSecret
@@ -35,7 +36,6 @@ class BrowseSecretsComponent extends React.Component {
     this.postComment = this
       .postComment
       .bind(this);
-
     this.cancelComment = this
       .cancelComment
       .bind(this);
@@ -112,11 +112,24 @@ class BrowseSecretsComponent extends React.Component {
       }.bind(this));
   }
 
-  getTrendingSecrets() {
+  getSecrets() {
+    var url;
+    if (this.props.type === 0) {
+      url = 'http://127.0.0.1:8080/trending';
+    } else {
+      url = 'http://127.0.0.1:8080/secret';
+    }
     axios
-      .get('http://127.0.0.1:8080/trending')
+      .get(url)
       .then(function (response) {
-        this.setState({isloading: false, secrets: response.data});
+        if (this.props.type === 0) {
+          this.setState({isloading: false, secrets: response.data});
+        } else {
+          this.setState({
+            isloading: false,
+            secrets: [response.data]
+          });
+        }
       }.bind(this))
       .catch(function () {
         this.setState({isloading: false, secrets: []});
@@ -124,62 +137,33 @@ class BrowseSecretsComponent extends React.Component {
       }.bind(this));
   }
   componentDidMount() {
-    this.getTrendingSecrets();
+    this.getSecrets();
   }
   render() {
     return (
       <div className="app-body">
-        <NavbarComponent active={2}/>
+        <NavbarComponent active={this.props.navbarActive}/>
         <div className="container">
           {this
             .state
             .secrets
             .map(function (item) {
-              return (
-                <div className="row" key={item._id}>
-                  <div className="col-md-12">
-                    <div className="panel panel-default">
-                      <div className="panel-body">
-                        {item.secret}
-                      </div>
-                      <div className="panel-footer">
-                        <div className="row">
-                          <div className="col-md-4 right-button-border">
-                            <div className="row">
-                              <div className="col-md-4"></div>
-                              <div className="col-md-4 text-left">
-                                <span className="like-count count-wrapper text-center">{item.likes}</span>
-                                <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 1)}>Like</a>
-                              </div>
-                              <div className="col-md-4"></div>
-                            </div>
-                          </div>
-                          <div className="col-md-4 right-button-border">
-                            <div className="row">
-                              <div className="col-md-4"></div>
-                              <div className="col-md-4 text-left">
-                                <span className="dislike-count count-wrapper text-center">{item.dislikes}</span>
-                                <a href="#" onClick={(e) => this.likeDislikeSecret(e, item._id, 0)}>Dislike</a>
-                              </div>
-                              <div className="col-md-4"></div>
-                            </div>
-                          </div>
-                          <div className="col-md-4">
-                            <div className="row">
-                              <div className="col-md-4"></div>
-                              <div className="col-md-5 text-left">
-                                <span className="comments-count count-wrapper text-center">{item.comments.length}</span>
-                                <a href="#" onClick={(e) => this.commentOnSecret(e, item._id)}>Comment</a>
-                              </div>
-                              <div className="col-md-3"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
+              return (<SecretComponent
+                id={item._id}
+                key={item._id}
+                secret={item.secret}
+                likes={item.likes}
+                dislikes={item.dislikes}
+                comments={item.comments}
+                likeActionHandler={this
+                .likeDislikeSecret
+                .bind(this)}
+                dislikeActionHandler={this
+                .likeDislikeSecret
+                .bind(this)}
+                commentActionHandler={this
+                .commentOnSecret
+                .bind(this)}/>);
             }.bind(this))}
         </div>
         <div
@@ -233,7 +217,14 @@ class BrowseSecretsComponent extends React.Component {
 
 BrowseSecretsComponent.displayName = 'BrowseSecretsComponent';
 
-// Uncomment properties you need BrowseSecretsComponent.propTypes = {};
-// BrowseSecretsComponent.defaultProps = {};
+// Uncomment properties you need
+BrowseSecretsComponent.propTypes = {
+  type: React.PropTypes.number,
+  navbarActive: React.PropTypes.number
+};
+BrowseSecretsComponent.defaultProps = {
+  type: 0,
+  navbarActive: 2
+};
 
 export default BrowseSecretsComponent;
