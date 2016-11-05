@@ -1,9 +1,6 @@
 'use strict';
 
 import React from 'react';
-import NavbarComponent from './NavbarComponent';
-import axios from 'axios';
-import sweetalert from 'sweetalert';
 import BrowseSecretsComponent from './BrowseSecretsComponent';
 
 require('styles//ViewRandomSecret.css');

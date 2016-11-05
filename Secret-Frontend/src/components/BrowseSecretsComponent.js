@@ -21,24 +21,6 @@ class BrowseSecretsComponent extends React.Component {
       commenttext: '',
       currenteditedsecret: ''
     };
-    this.getSecrets = this
-      .getSecrets
-      .bind(this);
-    this.likeDislikeSecret = this
-      .likeDislikeSecret
-      .bind(this);
-    this.commentOnSecret = this
-      .commentOnSecret
-      .bind(this);
-    this.handleChange = this
-      .handleChange
-      .bind(this);
-    this.postComment = this
-      .postComment
-      .bind(this);
-    this.cancelComment = this
-      .cancelComment
-      .bind(this);
   }
 
   handleChange(event) {
@@ -188,16 +170,26 @@ class BrowseSecretsComponent extends React.Component {
                     id="comment-text"
                     value={this.state.commenttext}
                     placeholder="Comment"
-                    onChange={this.handleChange}></textarea>
+                    onChange={this
+                    .handleChange
+                    .bind(this)}></textarea>
                 </div>
               </div>
               <div className="row"><br/></div>
               <div className="row">
                 <div className="col-md-3">
-                  <button className="btn btn-primary" onClick={this.postComment}>Post</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={this
+                    .postComment
+                    .bind(this)}>Post</button>
                 </div>
                 <div className="col-md-2">
-                  <button className="btn btn-primary" onClick={this.cancelComment}>Cancel</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={this
+                    .cancelComment
+                    .bind(this)}>Cancel</button>
                 </div>
               </div>
             </div>
@@ -211,7 +203,7 @@ class BrowseSecretsComponent extends React.Component {
                   .currenteditedsecretcomments
                   .map(function (item) {
                     return (
-                      <div className="col-md-12 comment-text">{item}</div>
+                      <div className="col-md-12 comment-text" key={item}>{item}</div>
                     );
                   })}
               </div>
