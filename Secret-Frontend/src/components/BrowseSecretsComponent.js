@@ -144,6 +144,14 @@ class BrowseSecretsComponent extends React.Component {
       <div className="app-body">
         <NavbarComponent active={this.props.navbarActive}/>
         <div className="container">
+          {this.state.secrets.length === 0
+            ? <div className="row col-md-12">
+                <div className="panel panel-body text-center">
+                  <h3>No Secrets</h3>
+                </div>
+              </div>
+            : <span></span>}
+
           {this
             .state
             .secrets

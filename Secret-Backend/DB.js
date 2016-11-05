@@ -23,11 +23,12 @@ var Database = (function () {
         db
             .count({}, function (err, count) {
                 if (err) {
-                    callback(err);
+                    callback(err, null);
                     return;
                 }
                 if (count === 0) {
-                    callback(null, []);
+                    callback(null, {});
+                    return;
                 }
                 var randomSkip = getRandomInt(count);
                 db
@@ -35,7 +36,7 @@ var Database = (function () {
                     .skip(randomSkip)
                     .exec(function (err, doc) {
                         if (err) {
-                            callback(err);
+                            callback(err, null);
                         } else {
                             callback(null, doc);
                         }
